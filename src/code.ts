@@ -4,18 +4,23 @@ var observable = Observable.create((observer:any) => {
 	try {
 		observer.next('next 1 - will show');
 		observer.next('next 2 - will show');
-		observer.complete();
-		observer.next('next 3 - will NOT show');
+		setInterval(() => {
+			observer.next('interval');
+		}, 2000);
 	} catch (err) {
 		observer.error(err)
 	}
 	
 })
 
-observable.subscribe(
+var observer = observable.subscribe(
 	(x:any) => addItem(x),			// next
 	(error:any) => addItem(error),	// error
 	() => addItem('Completed'));	// completion
+
+setTimeout(() => {
+	observer.unsubscribe();
+}, 7000)
 
 function addItem(val:any) {
     var node = document.createElement("li");
