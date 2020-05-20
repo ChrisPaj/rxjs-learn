@@ -1,10 +1,15 @@
 import { Observable } from "rxjs/Observable";
 
 var observable = Observable.create((observer:any) => {
-	observer.next('next 1 - will show');
-	observer.next('next 2 - will show');
-	observer.complete();
-	observer.next('next 3 - will NOT show');
+	try {
+		observer.next('next 1 - will show');
+		observer.next('next 2 - will show');
+		observer.complete();
+		observer.next('next 3 - will NOT show');
+	} catch (err) {
+		observer.error(err)
+	}
+	
 })
 
 observable.subscribe(
