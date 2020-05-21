@@ -1,28 +1,15 @@
-import { AsyncSubject } from "rxjs/AsyncSubject";
+import { from } from 'rxjs';
+import { merge } from 'rxjs/observable/merge';
 
-// only last data is shown, .complete() must be called
-var subject = new AsyncSubject();
+const array = ['Hey guys!'];
+const array2 = ['How is it going?'];
 
-var observer1 = subject.subscribe(
-	data => addItem('Observer 1: '+ data),
-	err => addItem(err),
-	// shown, because subject.complete() must be called
-	() => addItem('Observer 1 Completed') 
-)
+const myObs = from(array);
+const myObs2 = from(array2);
 
-var i = 1;
-var int = setInterval(() => subject.next(i++), 100);
+const myObsMerged = merge(myObs, myObs2) // merge Observables
 
-setTimeout(() => {
-	var observer2 = subject.subscribe(
-		data => addItem('Observer 2: '+ data),
-		err => addItem(err),
-		// shown, because subject.complete() must be called
-		() => addItem('Observer 2 Completed') 
-	)
-	subject.complete(); // must be called
-    clearInterval(int);
-}, 800);
+myObsMerged.subscribe((x:any) => addItem(x));
 
 function addItem(val: any) {
   var node = document.createElement("li");
