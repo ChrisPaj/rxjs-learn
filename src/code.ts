@@ -1,28 +1,19 @@
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { ReplaySubject } from "rxjs/ReplaySubject";
 
-var subject = new BehaviorSubject('First')
+var subject = new ReplaySubject(5);
 
-subject.subscribe(
-    data => addItem('Observer 1: '+ data),
-    err => addItem(err),
-    () => addItem('Observer 1 Completed')
-)
+var i = 1;
+var int = setInterval(() => subject.next(i++), 100);
 
-subject.next('The first thing has been sent')
-
-// does ALSO show 'The first thing has been sent'
-// does not show the initial value 'First'
-// shows the last (actual) value
-var observer2 = subject.subscribe(
-    data => addItem('Observer 2: '+ data)
-)
-
-subject.next('The second thing has been sent')
-subject.next('A third thing has been sent')
-
-observer2.unsubscribe();
-// not shown by observer2
-subject.next('A final thing has been sent')
+setTimeout(() => {
+	// last 5 values are shown
+	subject.subscribe(
+		data => addItem('Observer 1: '+ data),
+		err => addItem(err),
+		() => addItem('Observer 1 Completed')
+	)
+    clearInterval(int);
+}, 800);
 
 function addItem(val: any) {
   var node = document.createElement("li");
