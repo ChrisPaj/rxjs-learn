@@ -22,6 +22,8 @@ var observer2 = observable.subscribe(
   (x: any) => addItem(x + ' observer2'), 
 )
 
+observer.add(observer2);
+
 setTimeout(() => {
   observer.unsubscribe();
 }, 7000);
