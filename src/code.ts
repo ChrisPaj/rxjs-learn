@@ -1,17 +1,24 @@
-import { ReplaySubject } from "rxjs/ReplaySubject";
+import { AsyncSubject } from "rxjs/AsyncSubject";
 
-var subject = new ReplaySubject(5, 150); // (num, ms)
+// only last data is shown
+var subject = new AsyncSubject();
+
+var observer1 = subject.subscribe(
+	data => addItem('Observer 1: '+ data),
+	err => addItem(err),
+	() => addItem('Observer 1 Completed') // shown, too
+)
 
 var i = 1;
 var int = setInterval(() => subject.next(i++), 100);
 
 setTimeout(() => {
-	// last 5 values are shown created within the last 150ms
-	subject.subscribe(
-		data => addItem('Observer 1: '+ data),
+	var observer2 = subject.subscribe(
+		data => addItem('Observer 2: '+ data),
 		err => addItem(err),
-		() => addItem('Observer 1 Completed')
+		() => addItem('Observer 2 Completed') // shown, too
 	)
+	subject.complete();
     clearInterval(int);
 }, 800);
 
