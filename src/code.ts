@@ -1,6 +1,6 @@
-import { Subject } from "rxjs/Subject";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
-var subject = new Subject()
+var subject = new BehaviorSubject('First')
 
 subject.subscribe(
     data => addItem('Observer 1: '+ data),
@@ -10,7 +10,9 @@ subject.subscribe(
 
 subject.next('The first thing has been sent')
 
-// does not show 'The first thing has been sent'
+// does ALSO show 'The first thing has been sent'
+// does not show the initial value 'First'
+// shows the last (actual) value
 var observer2 = subject.subscribe(
     data => addItem('Observer 2: '+ data)
 )
