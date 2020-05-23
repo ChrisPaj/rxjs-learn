@@ -1,15 +1,11 @@
-import { from } from 'rxjs';
-import { merge } from 'rxjs/observable/merge';
+import { Observable } from "rxjs/Observable";
+import "rxjs/add/operator/map";
 
-const array = ['Hey guys!'];
-const array2 = ['How is it going?'];
-
-const myObs = from(array);
-const myObs2 = from(array2);
-
-const myObsMerged = merge(myObs, myObs2) // merge Observables
-
-myObsMerged.subscribe((x:any) => addItem(x));
+    Observable.create((observer:any) => {
+        observer.next('Hey guys!')
+    })
+    .map((val:any) => val.toUpperCase())
+    .subscribe((x:any) => addItem(x));
 
 function addItem(val: any) {
   var node = document.createElement("li");
